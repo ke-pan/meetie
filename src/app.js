@@ -24,7 +24,6 @@ export default class App extends React.Component {
           </Link>
         </AppBar>
 
-        {this.props.children}
       </div>
     );
   }

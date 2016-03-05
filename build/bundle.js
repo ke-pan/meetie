@@ -71,12 +71,9 @@
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.browserHistory },
-	  _react2.default.createElement(
-	    _reactRouter.Route,
-	    { path: '/', component: _app2.default },
-	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _login2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signup2.default })
-	  )
+	  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _app2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _login2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signup2.default })
 	), document.querySelector('.container'));
 
 /***/ },
@@ -19762,8 +19759,7 @@
 	            { to: 'signup' },
 	            _react2.default.createElement(_raisedButton2.default, { label: 'Sign up', primary: true, style: buttonStyle })
 	          )
-	        ),
-	        this.props.children
+	        )
 	      );
 	    }
 	  }]);

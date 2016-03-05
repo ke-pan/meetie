@@ -7,9 +7,8 @@ import { Router, Route, browserHistory } from 'react-router';
 
 render((
   <Router history={browserHistory}>
-    <Route path="/" component={App}>
-      <Route path="login" component={Login} />
-      <Route path="signup" component={Signup} />
-    </Route>
+    <Route path="/" component={App} />
+    <Route path="login" component={Login} />
+    <Route path="signup" component={Signup} />
   </Router>
 ), document.querySelector('.container'));
