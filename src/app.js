@@ -2,7 +2,7 @@ import React from 'react';
 import './app.css';
 import { Link } from 'react-router';
 import AppBar from 'material-ui/lib/app-bar';
-import RaisedButton from 'material-ui/lib/raised-button'
+import RaisedButton from 'material-ui/lib/raised-button';
 
 const buttonStyle = {
   margin: 12,
