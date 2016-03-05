@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Let's meet up",
   "main": "index.js",
+  "repository": "https://github.com/ke-pan/meetie",
   "scripts": {
     "lint": "eslint src",
     "test": "eslint src && jest",
