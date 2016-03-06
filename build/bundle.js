@@ -34963,15 +34963,10 @@
 	            'form',
 	            null,
 	            _react2.default.createElement(_textField2.default, {
-	              hintText: 'Name',
-	              floatingLabelText: 'Name',
-	              type: 'text'
-	            }),
-	            _react2.default.createElement('br', null),
-	            _react2.default.createElement(_textField2.default, {
 	              hintText: 'Email',
 	              floatingLabelText: 'Email',
-	              type: 'email'
+	              type: 'email',
+	              onBlur: validateEmail.bind(this)
 	            }),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(_textField2.default, {
@@ -34988,6 +34983,11 @@
 	          )
 	        )
 	      );
+	    }
+	  }, {
+	    key: 'validateEmail',
+	    value: function validateEmail() {
+	      console.log('validating email');
 	    }
 	  }]);
 	  return Login;
@@ -36207,14 +36207,86 @@
 	var Signup = function (_React$Component) {
 	  (0, _inherits3.default)(Signup, _React$Component);
 
-	  function Signup() {
+	  function Signup(props) {
 	    (0, _classCallCheck3.default)(this, Signup);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Signup).apply(this, arguments));
+
+	    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Signup).call(this, props));
+
+	    _this.state = {
+	      error: false,
+	      name: '',
+	      nameError: '',
+	      email: '',
+	      emailError: '',
+	      password: '',
+	      passwordError: ''
+	    };
+	    return _this;
 	  }
 
 	  (0, _createClass3.default)(Signup, [{
+	    key: 'handleNameChange',
+	    value: function handleNameChange(event) {
+	      this.setState({ name: event.target.value });
+	    }
+	  }, {
+	    key: 'validateName',
+	    value: function validateName() {
+	      if (!/[a-zA-Z_]{3,18}/.test(this.state.name)) {
+	        this.setState({
+	          nameError: 'valid character is lowercase letter, uppercase letter and "_", ' + 'Length Should between 3 and 18',
+	          error: true
+	        });
+	      } else {
+	        this.setState({
+	          nameError: '',
+	          error: false });
+	      }
+	    }
+	  }, {
+	    key: 'handleEmailChange',
+	    value: function handleEmailChange(event) {
+	      this.setState({ email: event.target.value });
+	    }
+	  }, {
+	    key: 'validateEmail',
+	    value: function validateEmail() {
+	      if (!/^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]{1,}$/.test(this.state.email)) {
+	        this.setState({
+	          emailError: 'Please input a valid email',
+	          error: true
+	        });
+	      } else {
+	        this.setState({
+	          emailError: '',
+	          error: false
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'handlePasswordChange',
+	    value: function handlePasswordChange(event) {
+	      this.setState({ password: event.target.value });
+	    }
+	  }, {
+	    key: 'validatePassword',
+	    value: function validatePassword() {
+	      if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,18}$/.test(this.state.password)) {
+	        this.setState({
+	          passwordError: 'Should contain at least one number, ' + 'one lowercase letter, one uppercase letter. ' + 'Length should between 8 and 18',
+	          error: true
+	        });
+	      } else {
+	        this.setState({
+	          passwordError: '',
+	          error: false });
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -36231,19 +36303,40 @@
 	            _react2.default.createElement(_textField2.default, {
 	              hintText: 'Name',
 	              floatingLabelText: 'Name',
-	              type: 'text'
+	              type: 'text',
+	              value: this.state.name,
+	              errorText: this.state.nameError,
+	              onBlur: this.validateName.bind(this),
+	              onChange: this.handleNameChange.bind(this),
+	              onFocus: function onFocus() {
+	                _this2.setState({ nameError: '' });
+	              }
 	            }),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(_textField2.default, {
 	              hintText: 'Email',
 	              floatingLabelText: 'Email',
-	              type: 'email'
+	              type: 'email',
+	              value: this.state.email,
+	              errorText: this.state.emailError,
+	              onChange: this.handleEmailChange.bind(this),
+	              onBlur: this.validateEmail.bind(this),
+	              onFocus: function onFocus() {
+	                _this2.setState({ emailError: '' });
+	              }
 	            }),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(_textField2.default, {
 	              hintText: 'Password',
 	              floatingLabelText: 'Password',
-	              type: 'password'
+	              type: 'password',
+	              errorText: this.state.passwordError,
+	              value: this.state.password,
+	              onChange: this.handlePasswordChange.bind(this),
+	              onBlur: this.validatePassword.bind(this),
+	              onFocus: function onFocus() {
+	                _this2.setState({ passwordError: '' });
+	              }
 	            }),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(

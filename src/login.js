@@ -8,12 +8,56 @@ const divCenterStyle = {
   justifyContent: 'center',
 };
 
-const formStyle = {
-
-};
-
-
 export default class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: false,
+      email: '',
+      emailError: '',
+      password: '',
+      passwordError: ''
+    }
+  }
+
+  handleEmailChange(event) {
+    this.setState({email: event.target.value});
+  }
+
+  validateEmail() {
+    if (!/^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]{1,}$/.test(this.state.email)) {
+      this.setState({
+        emailError: 'Please input a valid email',
+        error: true,
+      });
+    } else {
+      this.setState({
+        emailError: '',
+        error: false,
+      });
+    }
+  }
+
+  handlePasswordChange(event) {
+    this.setState({password: event.target.value});
+  }
+
+  validatePassword() {
+    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,18}$/.test(this.state.password)) {
+      this.setState({
+        passwordError: 'Should contain at least one number, ' +
+        'one lowercase letter, one uppercase letter. ' +
+        'Length should between 8 and 18',
+        error: true
+      });
+    } else {
+      this.setState({
+        passwordError: '',
+        error: false}
+      );
+    }
+  }
+
   render() {
     return (
       <div>
@@ -27,14 +71,27 @@ export default class Login extends React.Component {
               hintText="Email"
               floatingLabelText="Email"
               type="email"
+              value={this.state.email}
+              errorText={this.state.emailError}
+              onChange={this.handleEmailChange.bind(this)}
+              onBlur={this.validateEmail.bind(this)}
+              onFocus={() => {this.setState({emailError: ''})}}
             /><br/>
             <TextField
               hintText="Password"
               floatingLabelText="Password"
               type="password"
+              errorText={this.state.passwordError}
+              value={this.state.password}
+              onChange={this.handlePasswordChange.bind(this)}
+              onBlur={this.validatePassword.bind(this)}
+              onFocus={() => {this.setState({passwordError: ''})}}
             /><br/>
             <div style={divCenterStyle}>
-              <RaisedButton label="Log In" secondary={true} />
+              <RaisedButton
+                label="Log In"
+                secondary={true}
+              />
             </div>
           </form>
         </div>
