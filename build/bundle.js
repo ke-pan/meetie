@@ -34936,19 +34936,78 @@
 	  justifyContent: 'center'
 	};
 
-	var formStyle = {};
-
 	var Login = function (_React$Component) {
 	  (0, _inherits3.default)(Login, _React$Component);
 
-	  function Login() {
+	  function Login(props) {
 	    (0, _classCallCheck3.default)(this, Login);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Login).apply(this, arguments));
+
+	    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Login).call(this, props));
+
+	    _this.state = {
+	      error: true,
+	      email: '',
+	      emailError: '',
+	      password: '',
+	      passwordError: ''
+	    };
+	    return _this;
 	  }
 
 	  (0, _createClass3.default)(Login, [{
+	    key: 'handleEmailChange',
+	    value: function handleEmailChange(event) {
+	      this.setState({ email: event.target.value });
+	    }
+	  }, {
+	    key: 'validateEmail',
+	    value: function validateEmail() {
+	      if (!/^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]{1,}$/.test(this.state.email)) {
+	        this.setState({
+	          emailError: 'Please input a valid email',
+	          error: true
+	        });
+	      } else {
+	        this.setState({
+	          emailError: '',
+	          error: false
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'handlePasswordChange',
+	    value: function handlePasswordChange(event) {
+	      this.setState({ password: event.target.value });
+	    }
+	  }, {
+	    key: 'validatePassword',
+	    value: function validatePassword() {
+	      if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,18}$/.test(this.state.password)) {
+	        this.setState({
+	          passwordError: 'Should contain at least one number, ' + 'one lowercase letter, one uppercase letter. ' + 'Length should between 8 and 18',
+	          error: true
+	        });
+	      } else {
+	        this.setState({
+	          passwordError: '',
+	          error: false });
+	      }
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {
+	      if (!this.state.error) {
+	        this.props.onLogin({
+	          email: this.state.email,
+	          password: this.state.password
+	        });
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -34966,34 +35025,51 @@
 	              hintText: 'Email',
 	              floatingLabelText: 'Email',
 	              type: 'email',
-	              onBlur: validateEmail.bind(this)
+	              value: this.state.email,
+	              errorText: this.state.emailError,
+	              onChange: this.handleEmailChange.bind(this),
+	              onBlur: this.validateEmail.bind(this),
+	              onFocus: function onFocus() {
+	                _this2.setState({ emailError: '' });
+	              }
 	            }),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(_textField2.default, {
 	              hintText: 'Password',
 	              floatingLabelText: 'Password',
-	              type: 'password'
+	              type: 'password',
+	              errorText: this.state.passwordError,
+	              value: this.state.password,
+	              onChange: this.handlePasswordChange.bind(this),
+	              onBlur: this.validatePassword.bind(this),
+	              onFocus: function onFocus() {
+	                _this2.setState({ passwordError: '' });
+	              }
 	            }),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(
 	              'div',
 	              { style: divCenterStyle },
-	              _react2.default.createElement(_raisedButton2.default, { label: 'Log In', secondary: true })
+	              _react2.default.createElement(_raisedButton2.default, {
+	                label: 'Log In',
+	                secondary: true,
+	                onTouchEnd: this.handleSubmit.bind(this)
+	              })
 	            )
 	          )
 	        )
 	      );
-	    }
-	  }, {
-	    key: 'validateEmail',
-	    value: function validateEmail() {
-	      console.log('validating email');
 	    }
 	  }]);
 	  return Login;
 	}(_react2.default.Component);
 
 	exports.default = Login;
+
+
+	Login.propTypes = {
+	  onLogin: _react2.default.PropTypes.func
+	};
 
 /***/ },
 /* 353 */
@@ -36197,6 +36273,8 @@
 
 	var _raisedButton2 = _interopRequireDefault(_raisedButton);
 
+	var _reactRouter = __webpack_require__(213);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var divCenterStyle = {
@@ -36213,7 +36291,7 @@
 	    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Signup).call(this, props));
 
 	    _this.state = {
-	      error: false,
+	      error: true,
 	      name: '',
 	      nameError: '',
 	      email: '',
@@ -36279,7 +36357,21 @@
 	      } else {
 	        this.setState({
 	          passwordError: '',
-	          error: false });
+	          error: false
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {
+	      if (!this.state.error) {
+	        console.log('jump to homepage');
+	        _reactRouter.browserHistory.push('/');
+	        //{
+	        //  name: this.state.name,
+	        //  email: this.state.email,
+	        //  password: this.state.password
+	        //};
 	      }
 	    }
 	  }, {
@@ -36342,7 +36434,12 @@
 	            _react2.default.createElement(
 	              'div',
 	              { style: divCenterStyle },
-	              _react2.default.createElement(_raisedButton2.default, { label: 'Sign Up', primary: true })
+	              _react2.default.createElement(_raisedButton2.default, {
+	                label: 'Sign Up',
+	                primary: true,
+	                onMouseDown: this.handleSubmit.bind(this),
+	                onTouchEnd: this.handleSubmit.bind(this)
+	              })
 	            )
 	          )
 	        )

@@ -1,7 +1,8 @@
 import React from 'react';
-import AppBar from 'material-ui/lib/app-bar'
-import TextField from 'material-ui/lib/text-field'
-import RaisedButton from 'material-ui/lib/raised-button'
+import AppBar from 'material-ui/lib/app-bar';
+import TextField from 'material-ui/lib/text-field';
+import RaisedButton from 'material-ui/lib/raised-button';
+import { browserHistory } from 'react-router'
 
 const divCenterStyle = {
   display: 'flex',
@@ -12,7 +13,7 @@ export default class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: false,
+      error: true,
       name: '',
       nameError: '',
       email: '',
@@ -74,8 +75,17 @@ export default class Signup extends React.Component {
     } else {
       this.setState({
         passwordError: '',
-        error: false}
-      );
+        error: false
+      });
+    }
+  }
+
+  handleSubmit() {
+    if (!this.state.error) {
+      browserHistory.push('/');
+      sessionStorage.setItem('name', this.state.name);
+      sessionStorage.setItem('email', this.state.email);
+      sessionStorage.setItem('password', this.state.password);
     }
   }
 
@@ -122,9 +132,10 @@ export default class Signup extends React.Component {
               <RaisedButton
                 label="Sign Up"
                 primary={true}
+                onMouseDown={this.handleSubmit.bind(this)}
+                onTouchEnd={this.handleSubmit.bind(this)}
               />
             </div>
-
           </form>
         </div>
       </div>

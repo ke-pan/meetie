@@ -12,7 +12,7 @@ export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: false,
+      error: true,
       email: '',
       emailError: '',
       password: '',
@@ -58,6 +58,14 @@ export default class Login extends React.Component {
     }
   }
 
+  handleSubmit() {
+    if (!this.state.error) {
+      browserHistory.push('/');
+      sessionStorage.setItem('email', this.state.email);
+      sessionStorage.setItem('password', this.state.password);
+    }
+  }
+
   render() {
     return (
       <div>
@@ -91,6 +99,8 @@ export default class Login extends React.Component {
               <RaisedButton
                 label="Log In"
                 secondary={true}
+                onMouseDown={this.handleSubmit.bind(this)}
+                onTouchEnd={this.handleSubmit.bind(this)}
               />
             </div>
           </form>
@@ -99,3 +109,4 @@ export default class Login extends React.Component {
     );
   }
 }
+
