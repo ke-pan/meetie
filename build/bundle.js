@@ -34936,6 +34936,11 @@
 	  justifyContent: 'center'
 	};
 
+	var errorMessageStyle = {
+	  margin: 15,
+	  color: 'red'
+	};
+
 	var Login = function (_React$Component) {
 	  (0, _inherits3.default)(Login, _React$Component);
 
@@ -34949,8 +34954,10 @@
 	      email: '',
 	      emailError: '',
 	      password: '',
-	      passwordError: ''
+	      passwordError: '',
+	      showLoginError: false
 	    };
+	    _this.loginErrorMessage.bind(_this);
 	    return _this;
 	  }
 
@@ -34997,10 +35004,24 @@
 	    key: 'handleSubmit',
 	    value: function handleSubmit() {
 	      if (!this.state.error) {
-	        this.props.onLogin({
-	          email: this.state.email,
-	          password: this.state.password
-	        });
+	        if (localStorage.getItem('email') == this.state.email && localStorage.getItem('password') == this.state.password) {
+	          browserHistory.push('/');
+	        } else {
+	          this.setState({ showLoginError: true });
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'loginErrorMessage',
+	    value: function loginErrorMessage() {
+	      if (this.state.showLoginError) {
+	        return _react2.default.createElement(
+	          'div',
+	          { style: errorMessageStyle },
+	          'Email or Password wrong'
+	        );
+	      } else {
+	        return null;
 	      }
 	    }
 	  }, {
@@ -35047,12 +35068,14 @@
 	              }
 	            }),
 	            _react2.default.createElement('br', null),
+	            this.loginErrorMessage(),
 	            _react2.default.createElement(
 	              'div',
 	              { style: divCenterStyle },
 	              _react2.default.createElement(_raisedButton2.default, {
 	                label: 'Log In',
 	                secondary: true,
+	                onMouseDown: this.handleSubmit.bind(this),
 	                onTouchEnd: this.handleSubmit.bind(this)
 	              })
 	            )
@@ -35065,11 +35088,6 @@
 	}(_react2.default.Component);
 
 	exports.default = Login;
-
-
-	Login.propTypes = {
-	  onLogin: _react2.default.PropTypes.func
-	};
 
 /***/ },
 /* 353 */
@@ -36365,13 +36383,10 @@
 	    key: 'handleSubmit',
 	    value: function handleSubmit() {
 	      if (!this.state.error) {
-	        console.log('jump to homepage');
 	        _reactRouter.browserHistory.push('/');
-	        //{
-	        //  name: this.state.name,
-	        //  email: this.state.email,
-	        //  password: this.state.password
-	        //};
+	        sessionStorage.setItem('name', this.state.name);
+	        sessionStorage.setItem('email', this.state.email);
+	        sessionStorage.setItem('password', this.state.password);
 	      }
 	    }
 	  }, {

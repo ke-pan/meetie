@@ -8,6 +8,12 @@ const divCenterStyle = {
   justifyContent: 'center',
 };
 
+const errorMessageStyle = {
+  marginTop: 15,
+  marginBottom: 15,
+  color: 'red',
+}
+
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -16,8 +22,10 @@ export default class Login extends React.Component {
       email: '',
       emailError: '',
       password: '',
-      passwordError: ''
+      passwordError: '',
+      showLoginError: false
     }
+    this.loginErrorMessage.bind(this);
   }
 
   handleEmailChange(event) {
@@ -60,9 +68,24 @@ export default class Login extends React.Component {
 
   handleSubmit() {
     if (!this.state.error) {
-      browserHistory.push('/');
-      sessionStorage.setItem('email', this.state.email);
-      sessionStorage.setItem('password', this.state.password);
+      if (localStorage.getItem('email') == this.state.email &&
+        localStorage.getItem('password') == this.state.password) {
+        browserHistory.push('/');
+      } else {
+        this.setState({showLoginError: true});
+      }
+    }
+  }
+
+  loginErrorMessage() {
+    if (this.state.showLoginError) {
+      return (
+        <div style={errorMessageStyle}>
+          Email or Password wrong
+        </div>
+      );
+    } else {
+      return null;
     }
   }
 
@@ -95,6 +118,7 @@ export default class Login extends React.Component {
               onBlur={this.validatePassword.bind(this)}
               onFocus={() => {this.setState({passwordError: ''})}}
             /><br/>
+            { this.loginErrorMessage() }
             <div style={divCenterStyle}>
               <RaisedButton
                 label="Log In"
@@ -103,6 +127,7 @@ export default class Login extends React.Component {
                 onTouchEnd={this.handleSubmit.bind(this)}
               />
             </div>
+
           </form>
         </div>
       </div>
