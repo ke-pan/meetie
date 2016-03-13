@@ -12,6 +12,7 @@ const presetType = ['birthday party', 'conference talk', 'wedding'];
 
 export default class EventForm extends React.Component {
   constructor(props) {
+    super(props);
     this.state = {
       title: '',
       titleError: '',
@@ -130,7 +131,7 @@ export default class EventForm extends React.Component {
   handleSubmit() {
     if (!this.state.error) {
       browserHistory.push('/');
-      
+
     }
   }
 
