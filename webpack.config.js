@@ -1,12 +1,20 @@
-const Path = require("path")
+const Path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
-  entry: Path.resolve(__dirname, "./src/index.js"),
+  entry: [
+    Path.resolve(__dirname, "./src/index.js"),
+    'webpack/hot/dev-server',
+    'webpack-dev-server/client?http://localhost:8080',
+  ],
   output: {
     path: Path.resolve(__dirname, "./build"),
     filename: "bundle.js",
-    publicPath: "./bundle"
+    publicPath: Path.resolve(__dirname, "./build")
   },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
   module: {
     loaders: [
       {
