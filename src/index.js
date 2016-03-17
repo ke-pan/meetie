@@ -10,7 +10,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
 
-[]
 
 render((
   <Router history={browserHistory}>
@@ -20,4 +19,3 @@ render((
     <Route path="new" component={EventForm} />
   </Router>
 ), document.querySelector('.container'));
-œ
