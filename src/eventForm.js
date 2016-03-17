@@ -13,7 +13,7 @@ const divCenterStyle = {
   justifyContent: 'center',
 };
 
-const presetType = ['birthday party', 'conference talk', 'wedding'];
+const presetType = ['Birthday party', 'Conference talk', 'Wedding'];
 
 export default class EventForm extends React.Component {
   constructor(props) {

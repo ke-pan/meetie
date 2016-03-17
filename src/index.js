@@ -7,8 +7,12 @@ import EventForm from './eventForm';
 import EventList from './eventList';
 import { Router, Route, browserHistory } from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import { createStore } from 'redux';
+import reducer from './reducer';
 
 injectTapEventPlugin();
+
+const store = createStore(reducer);
 
 
 render((
