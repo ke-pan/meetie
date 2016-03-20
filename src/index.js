@@ -3,7 +3,7 @@ import React from 'react';
 import App from './components/app';
 import Login from './components/login';
 import Signup from './components/signup';
-import EventForm from './components/eventForm';
+import FormPage from './containers/formPage';
 import EventPage from './containers/eventPage';
 import { Router, Route, browserHistory } from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -34,7 +34,7 @@ render((
       <Route path="/" component={EventPage} />
       <Route path="login" component={Login} />
       <Route path="signup" component={Signup} />
-      <Route path="new" component={EventForm} />
+      <Route path="new" component={FormPage} />
     </Router>
   </Provider>
 ), document.querySelector('.container'));

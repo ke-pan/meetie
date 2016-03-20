@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from 'material-ui/lib/app-bar';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
-import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router';
 
 const divCenterStyle = {
   display: 'flex',

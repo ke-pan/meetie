@@ -32,6 +32,8 @@ export default class EventForm extends React.Component {
       message: '',
       error: true,
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
   }
 
   handleTitleChange(event) {
@@ -134,7 +136,21 @@ export default class EventForm extends React.Component {
 
   handleSubmit() {
     if (!this.state.error) {
-      browserHistory.push('/');
+      this.props.onSubmit({
+          title: this.state.title,
+          location: this.state.location,
+          host: this.state.host,
+          guests: this.state.guests,
+          message: this.state.message,
+          started_at: {
+            date: this.refs.startAtDate.getDate().toDateString(),
+            time: this.refs.startAtTime.getTime().toTimeString()
+          },
+          ended_at: {
+            date: this.refs.endAtDate.getDate().toDateString(),
+            time: this.refs.endAtTime.getTime().toTimeString()
+          }
+      });
     }
   }
 
@@ -154,7 +170,7 @@ export default class EventForm extends React.Component {
               value={this.state.title}
               errorText={this.state.titleError}
               onBlur={this.validateTitle.bind(this)}
-              onChange={this.handleTitleChange.bind(this)}
+              onChange={this.handleTitleChange}
               onFocus={ () => {this.setState({titleError: ''});} }
             /><br />
             <AutoComplete
@@ -228,8 +244,8 @@ export default class EventForm extends React.Component {
               <RaisedButton
                 label="Create Event"
                 primary={true}
-                onMouseDown={this.handleSubmit.bind(this)}
-                onTouchEnd={this.handleSubmit.bind(this)}
+                onMouseDown={this.handleSubmit}
+                onTouchEnd={this.handleSubmit}
               />
             </div>
           </form>
