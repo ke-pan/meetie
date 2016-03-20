@@ -1,9 +1,9 @@
 import { render } from 'react-dom';
 import React from 'react';
-import App from './app';
-import Login from './login';
-import Signup from './signup';
-import EventForm from './eventForm';
+import App from './components/app';
+import Login from './components/login';
+import Signup from './components/signup';
+import EventForm from './components/eventForm';
 import EventPage from './containers/eventPage';
 import { Router, Route, browserHistory } from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
