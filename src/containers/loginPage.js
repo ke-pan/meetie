@@ -2,6 +2,12 @@ import Login from '../components/login';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 
+const mapStateToProps = (state) => {
+  return {
+    users: state.users,
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     onSubmit: () => {
@@ -13,4 +19,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

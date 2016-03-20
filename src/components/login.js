@@ -80,7 +80,7 @@ export default class Login extends React.Component {
 
   handleSubmit() {
     if (!this.state.error) {
-      let index = this.users.findIndex((u) => {
+      let index = this.props.users.findIndex((u) => {
         u.password == this.state.password && u.email == this.state.email;
       })
       if (index !== -1) {
