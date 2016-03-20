@@ -82,10 +82,11 @@ export default class Signup extends React.Component {
 
   handleSubmit() {
     if (!this.state.error) {
-      browserHistory.push('/');
-      sessionStorage.setItem('name', this.state.name);
-      sessionStorage.setItem('email', this.state.email);
-      sessionStorage.setItem('password', this.state.password);
+      this.props.onSubmit({
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password
+      });
     }
   }
 

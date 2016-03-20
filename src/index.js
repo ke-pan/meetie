@@ -1,9 +1,8 @@
 import { render } from 'react-dom';
 import React from 'react';
-import App from './components/app';
-import Login from './components/login';
-import Signup from './components/signup';
-import FormPage from './containers/formPage';
+import LoginPage from './containers/loginPage';
+import SignupPage from './containers/signupPage';
+import EventFormPage from './containers/eventFormPage';
 import EventPage from './containers/eventPage';
 import { Router, Route, browserHistory } from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -24,8 +23,6 @@ if (module.hot) {
   })
 }
 
-console.log(store.getState());
-
 const history = syncHistoryWithStore(browserHistory, store)
 
 render((
@@ -34,7 +31,7 @@ render((
       <Route path="/" component={EventPage} />
       <Route path="login" component={Login} />
       <Route path="signup" component={Signup} />
-      <Route path="new" component={FormPage} />
+      <Route path="new" component={EventFormPage} />
     </Router>
   </Provider>
 ), document.querySelector('.container'));
