@@ -25,12 +25,21 @@ if (module.hot) {
 
 const history = syncHistoryWithStore(browserHistory, store)
 
+const requireAuth = (nextState, replace) => {
+  if (!store.getState().log) {
+    replace({
+      pathname: "login",
+      state: { nextPathname: nextState.location.pathname }
+    });
+  }
+}
+
 render((
   <Provider store={store}>
     <Router history={history} >
-      <Route path="/" component={EventPage} />
-      <Route path="login" component={Login} />
-      <Route path="signup" component={Signup} />
+      <Route path="/" component={EventPage} onEnter={requireAuth}/>
+      <Route path="login" component={LoginPage} />
+      <Route path="signup" component={SignupPage} />
       <Route path="new" component={EventFormPage} />
     </Router>
   </Provider>

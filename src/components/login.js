@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from 'material-ui/lib/app-bar';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
-import { browserHistory } from 'react-router';
+import { Link } from 'react-router';
 
 const divCenterStyle = {
   display: 'flex',
@@ -13,6 +13,10 @@ const errorMessageStyle = {
   marginTop: 15,
   marginBottom: 15,
   color: 'red',
+}
+
+const buttonStyle = {
+  margin: 12,
 }
 
 export default class Login extends React.Component {
@@ -66,8 +70,8 @@ export default class Login extends React.Component {
     if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,18}$/.test(this.state.password)) {
       this.setState({
         passwordError: 'Should contain at least one number, ' +
-        'one lowercase letter, one uppercase letter. ' +
-        'Length should between 8 and 18',
+        'one lowercase letter, one uppercase letter; ' +
+        'Length should between 8 and 18; only letter and number legal',
         error: true
       });
     } else {
@@ -79,9 +83,11 @@ export default class Login extends React.Component {
   }
 
   handleSubmit() {
+    this.validateEmail();
+    this.validatePassword();
     if (!this.state.error) {
       let index = this.props.users.findIndex((u) => {
-        u.password == this.state.password && u.email == this.state.email;
+        return (u.password === this.state.password && u.email === this.state.email);
       })
       if (index !== -1) {
         this.props.onSubmit()
@@ -109,7 +115,11 @@ export default class Login extends React.Component {
         <AppBar
           title="Log In"
           showMenuIconButton={false}
-        />
+        >
+          <Link to="signup">
+            <RaisedButton label="Sign Up" primary={true} style={buttonStyle}/>
+          </Link>
+        </AppBar>
         <div style={divCenterStyle}>
           <form>
             <TextField

@@ -2,11 +2,15 @@ import React from 'react';
 import AppBar from 'material-ui/lib/app-bar';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
-import { browserHistory } from 'react-router';
+import { Link } from 'react-router';
 
 const divCenterStyle = {
   display: 'flex',
   justifyContent: 'center',
+}
+
+const buttonStyle = {
+  margin: 12,
 }
 
 export default class Signup extends React.Component {
@@ -81,6 +85,9 @@ export default class Signup extends React.Component {
   }
 
   handleSubmit() {
+    this.validateEmail();
+    this.validateName();
+    this.validatePassword();
     if (!this.state.error) {
       this.props.onSubmit({
         name: this.state.name,
@@ -96,7 +103,11 @@ export default class Signup extends React.Component {
         <AppBar
           title="Sign Up"
           showMenuIconButton={false}
-        />
+        >
+          <Link to="login">
+            <RaisedButton label="Log In" default={true} style={buttonStyle}/>
+          </Link>
+        </AppBar>
         <div style={divCenterStyle}>
           <form>
             <TextField
