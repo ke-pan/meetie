@@ -7,7 +7,8 @@
   "scripts": {
     "lint": "eslint src",
     "test": "eslint src && jest",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "start": "node server.js"
   },
   "author": "ke-pan",
   "license": "MIT",
@@ -25,12 +26,16 @@
     "eslint-config-airbnb": "^6.0.2",
     "eslint-loader": "^1.3.0",
     "eslint-plugin-react": "^4.1.0",
+    "express": "^4.13.4",
     "jest-cli": "^0.8.2",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.14",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-middleware": "^1.5.1",
+    "webpack-dev-server": "^1.14.1",
+    "webpack-hot-middleware": "^2.10.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.7.2",
     "material-ui": "^0.14.4",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",

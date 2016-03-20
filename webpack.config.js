@@ -1,25 +1,26 @@
-const Path = require("path");
+const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
+  devtool: 'cheap-module-eval-source-map',
   entry: [
-    Path.resolve(__dirname, "./src/index.js"),
-    'webpack/hot/dev-server',
-    'webpack-dev-server/client?http://localhost:8080',
+    path.resolve(__dirname, "./src/index.js"),
+    'webpack-hot-middleware/client'
   ],
   output: {
-    path: Path.resolve(__dirname, "./build"),
+    path: path.resolve(__dirname, "./build"),
     filename: "bundle.js",
-    publicPath: Path.resolve(__dirname, "./build")
+    publicPath: "/static/"
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
   module: {
     loaders: [
       {
         test: /\.jsx?$/,
-        include: Path.resolve(__dirname, "./src"),
+        include: path.resolve(__dirname, "./src"),
         loader: "babel",
         query: {
           presets: ["react", "es2015"]
@@ -27,7 +28,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: Path.resolve(__dirname, "./src"),
+        include: path.resolve(__dirname, "./src"),
         loader: "style-loader!css-loader"
       }
     ]
