@@ -6,12 +6,16 @@ import TimePicker from 'material-ui/lib/time-picker';
 import AppBar from 'material-ui/lib/app-bar';
 import Toggle from 'material-ui/lib/toggle';
 import RaisedButton from 'material-ui/lib/raised-button';
-import { browserHistory } from 'react-router';
+import { Link } from 'react-router';
 
 const divCenterStyle = {
   display: 'flex',
   justifyContent: 'center',
 };
+
+const buttonStyle = {
+  margin: 12,
+}
 
 const presetType = ['Birthday party', 'Conference talk', 'Wedding'];
 
@@ -160,7 +164,11 @@ export default class EventForm extends React.Component {
         <AppBar
           title="New event"
           showMenuIconButton={false}
-        />
+        >
+          <Link to="/">
+            <RaisedButton label="Events" default={true} style={buttonStyle}/>
+          </Link>
+        </AppBar>
         <div style={divCenterStyle}>
           <form>
             <TextField
