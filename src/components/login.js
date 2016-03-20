@@ -25,12 +25,20 @@ export default class Login extends React.Component {
       password: '',
       passwordError: '',
       showLoginError: false
-    }
-    this.loginErrorMessage.bind(this);
+    };
+    this.loginErrorMessage = this.loginErrorMessage.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.validatePassword = this.validatePassword.bind(this);
   }
 
   handleEmailChange(event) {
-    this.setState({email: event.target.value});
+    this.setState({
+      email: event.target.value,
+      showLoginError: false
+    });
   }
 
   validateEmail() {
@@ -48,7 +56,10 @@ export default class Login extends React.Component {
   }
 
   handlePasswordChange(event) {
-    this.setState({password: event.target.value});
+    this.setState({
+      password: event.target.value,
+      showLoginError: false
+    });
   }
 
   validatePassword() {
@@ -69,9 +80,11 @@ export default class Login extends React.Component {
 
   handleSubmit() {
     if (!this.state.error) {
-      if (localStorage.getItem('email') == this.state.email &&
-        localStorage.getItem('password') == this.state.password) {
-        browserHistory.push('/');
+      let index = this.users.findIndex((u) => {
+        u.password == this.state.password && u.email == this.state.email;
+      })
+      if (index !== -1) {
+        this.props.onSubmit()
       } else {
         this.setState({showLoginError: true});
       }
@@ -105,7 +118,7 @@ export default class Login extends React.Component {
               type="email"
               value={this.state.email}
               errorText={this.state.emailError}
-              onChange={this.handleEmailChange.bind(this)}
+              onChange={this.handleEmailChange}
               onBlur={this.validateEmail.bind(this)}
               onFocus={() => {this.setState({emailError: ''})}}
             /><br/>
@@ -124,8 +137,8 @@ export default class Login extends React.Component {
               <RaisedButton
                 label="Log In"
                 secondary={true}
-                onMouseDown={this.handleSubmit.bind(this)}
-                onTouchEnd={this.handleSubmit.bind(this)}
+                onMouseDown={this.handleSubmit}
+                onTouchEnd={this.handleSubmit}
               />
             </div>
 
