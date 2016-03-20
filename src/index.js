@@ -4,22 +4,29 @@ import App from './app';
 import Login from './login';
 import Signup from './signup';
 import EventForm from './eventForm';
-import EventList from './eventList';
+import EventPage from './containers/eventPage';
 import { Router, Route, browserHistory } from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { createStore } from 'redux';
-import reducer from './reducers';
+import { syncHistoryWithStore } from 'react-router-redux';
+import { Provider } from 'react-redux'
+import reducers from './reducers';
 
 injectTapEventPlugin();
 
-const store = createStore(reducer);
+const store = createStore(reducers);
 
+console.log(store.getState());
+
+const history = syncHistoryWithStore(browserHistory, store)
 
 render((
-  <Router history={browserHistory} >
-    <Route path="/" component={EventList} />
-    <Route path="login" component={Login} />
-    <Route path="signup" component={Signup} />
-    <Route path="new" component={EventForm} />
-  </Router>
+  <Provider store={store}>
+    <Router history={history} >
+      <Route path="/" component={EventPage} />
+      <Route path="login" component={Login} />
+      <Route path="signup" component={Signup} />
+      <Route path="new" component={EventForm} />
+    </Router>
+  </Provider>
 ), document.querySelector('.container'));
