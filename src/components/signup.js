@@ -23,8 +23,12 @@ export default class Signup extends React.Component {
       email: '',
       emailError: '',
       password: '',
-      passwordError: ''
+      passwordError: '',
+      employer: '',
+      jobTitle: '',
     }
+    this.handleEmployerChange = this.handleEmployerChange.bind(this);
+    this.handleJobTitleChange = this.handleJobTitleChange.bind(this);
   }
 
   handleNameChange(event) {
@@ -84,6 +88,14 @@ export default class Signup extends React.Component {
     }
   }
 
+  handleJobTitleChange(event) {
+    this.setState({jobTitle: event.target.value});
+  }
+
+  handleEmployerChange(event) {
+    this.setState({employer: event.target.value});
+  }
+
   handleSubmit() {
     this.validateEmail();
     this.validateName();
@@ -139,6 +151,20 @@ export default class Signup extends React.Component {
               onChange={this.handlePasswordChange.bind(this)}
               onBlur={this.validatePassword.bind(this)}
               onFocus={() => {this.setState({passwordError: ''})}}
+            /><br/>
+            <TextField
+              hintText="Employer (Optional)"
+              floatingLabelText="Employer (Optional)"
+              type="text"
+              value={this.state.employer}
+              onChange={this.handleEmployerChange}
+            /><br/>
+            <TextField
+              hintText="Job title (Optional)"
+              floatingLabelText="Job title (Optional)"
+              type="text"
+              value={this.state.jobTitle}
+              onChange={this.handleJobTitleChange}
             /><br/>
             <div style={divCenterStyle}>
               <RaisedButton
