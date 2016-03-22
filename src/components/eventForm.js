@@ -1,6 +1,5 @@
 import React from 'react';
 import TextField from 'material-ui/lib/text-field';
-import AutoComplete from 'material-ui/lib/auto-complete';
 import DatePicker from 'material-ui/lib/date-picker/date-picker';
 import TimePicker from 'material-ui/lib/time-picker';
 import AppBar from 'material-ui/lib/app-bar';
@@ -17,7 +16,11 @@ const buttonStyle = {
   margin: 12,
 }
 
-const presetType = ['Birthday party', 'Conference talk', 'Wedding'];
+const errorMessageStyle = {
+  marginTop: 15,
+  marginBottom: 15,
+  color: 'red',
+}
 
 export default class EventForm extends React.Component {
   constructor(props) {
@@ -31,13 +34,16 @@ export default class EventForm extends React.Component {
       hostError: '',
       location: '',
       locationError: '',
+      timeError: false,
       guests: '',
       showMessage: false,
       message: '',
       error: true,
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.validateTitle = this.validateTitle.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.validateTime = this.validateTime.bind(this);
   }
 
   handleTitleChange(event) {
@@ -48,11 +54,15 @@ export default class EventForm extends React.Component {
 
   validateTitle() {
     if (this.state.title.trim() === '') {
-      this.state.error = true;
-      this.titleError = 'Please input a title';
+      this.setState({
+        error: true,
+        titleError: 'Please input a title',
+      });
     } else {
-      this.state.error = false;
-      this.titleError = '';
+      this.setState({
+        error: false,
+        titleError: '',
+      });
     }
   }
 
@@ -64,11 +74,15 @@ export default class EventForm extends React.Component {
 
   validateType() {
     if (this.state.type.trim() === '') {
-      this.state.error = true;
-      this.typeError = 'Please input an event type';
+      this.setState({
+        error: true,
+        typeError: 'Please input an event type',
+      });
     } else {
-      this.state.error = false;
-      this.typeError = '';
+      this.setState({
+        error: false,
+        typeError: '',
+      });
     }
   }
 
@@ -80,11 +94,15 @@ export default class EventForm extends React.Component {
 
   validateHost() {
     if (this.state.host.trim() === '') {
-      this.state.error = true;
-      this.hostError = 'Who host the event?';
+      this.setState({
+        error: true,
+        hostError: 'Who host the event?'
+      });
     } else {
-      this.state.error = false;
-      this.hostError = '';
+      this.setState({
+        error: false,
+        hostError: '',
+      });
     }
   }
 
@@ -102,11 +120,34 @@ export default class EventForm extends React.Component {
 
   validateLocation() {
     if (this.state.location.trim() === '') {
-      this.state.error = true;
-      this.locationError = 'Please input a location';
+      this.setState({
+        error: true,
+        locationError: 'Please input a location',
+      });
     } else {
-      this.state.error = false;
-      this.locationError = '';
+      this.setState({
+        error: false,
+        locationError: '',
+      });
+    }
+  }
+
+  validateTime() {
+    let startedAt = new Date(this.refs.startAtDate.getDate().toDateString() + ' ' +
+      this.refs.startAtTime.getTime().toTimeString()).getTime()
+    let endedAt = new Date(this.refs.endAtDate.getDate().toDateString() + ' ' +
+      this.refs.endAtTime.getTime().toTimeString()).getTime()
+
+    if (startedAt >= endedAt) {
+      this.setState({
+        error: true,
+        timeError: true
+      });
+    } else {
+      this.setState({
+        error: false,
+        timeError: false
+      });
     }
   }
 
@@ -139,6 +180,11 @@ export default class EventForm extends React.Component {
   }
 
   handleSubmit() {
+    this.validateTitle();
+    this.validateType();
+    this.validateHost();
+    this.validateLocation();
+    this.validateTime();
     if (!this.state.error) {
       this.props.onSubmit({
           title: this.state.title,
@@ -177,18 +223,16 @@ export default class EventForm extends React.Component {
               type="text"
               value={this.state.title}
               errorText={this.state.titleError}
-              onBlur={this.validateTitle.bind(this)}
+              onBlur={this.validateTitle}
               onChange={this.handleTitleChange}
               onFocus={ () => {this.setState({titleError: ''});} }
             /><br />
-            <AutoComplete
+            <TextField
               hintText="Type"
               floatingLabelText="Type"
               type="text"
               value={this.state.type}
               errorText={this.state.typeError}
-              dataSource={presetType}
-              filter={AutoComplete.fuzzyFilter}
               onBlur={this.validateType.bind(this)}
               onChange={this.handleTypeChange.bind(this)}
               onFocus={ () => {this.setState({typeError: ''});} }
@@ -225,6 +269,10 @@ export default class EventForm extends React.Component {
                 defaultTime={new Date()}
               />
             </div>
+            { this.state.timeError ?
+              <div style={errorMessageStyle}>
+                Start time should be earlier than end time
+              </div> : null }
             <TextField
               hintText="Guest list, separated by comma"
               floatingLabelText="Guest list"

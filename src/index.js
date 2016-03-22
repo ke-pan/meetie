@@ -40,7 +40,7 @@ render((
       <Route path="/" component={EventPage} onEnter={requireAuth}/>
       <Route path="login" component={LoginPage} />
       <Route path="signup" component={SignupPage} />
-      <Route path="new" component={EventFormPage} onEnter={requireAuth}/>
+      <Route path="new" component={EventFormPage} />
     </Router>
   </Provider>
 ), document.querySelector('.container'));
