@@ -1,5 +1,6 @@
 import React from 'react';
 import TextField from 'material-ui/lib/text-field';
+import AutoComplete from 'material-ui/lib/auto-complete';
 import DatePicker from 'material-ui/lib/date-picker/date-picker';
 import TimePicker from 'material-ui/lib/time-picker';
 import AppBar from 'material-ui/lib/app-bar';
@@ -14,13 +15,15 @@ const divCenterStyle = {
 
 const buttonStyle = {
   margin: 12,
-}
+};
 
 const errorMessageStyle = {
   marginTop: 15,
   marginBottom: 15,
   color: 'red',
-}
+};
+
+const dataSource = ['Birthday Party', 'Wedding', 'Conference'];
 
 export default class EventForm extends React.Component {
   constructor(props) {
@@ -42,6 +45,7 @@ export default class EventForm extends React.Component {
     };
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.validateTitle = this.validateTitle.bind(this);
+    this.handleTypeChange = this.handleTypeChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateTime = this.validateTime.bind(this);
   }
@@ -227,15 +231,15 @@ export default class EventForm extends React.Component {
               onChange={this.handleTitleChange}
               onFocus={ () => {this.setState({titleError: ''});} }
             /><br />
-            <TextField
+            <AutoComplete
               hintText="Type"
               floatingLabelText="Type"
               type="text"
               value={this.state.type}
               errorText={this.state.typeError}
-              onBlur={this.validateType.bind(this)}
-              onChange={this.handleTypeChange.bind(this)}
-              onFocus={ () => {this.setState({typeError: ''});} }
+              filter={AutoComplete.noFilter}
+              dataSource={dataSource}
+              onChange={this.handleTypeChange}
             /><br />
             <TextField
               hintText="Person or organization"
