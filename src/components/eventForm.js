@@ -222,6 +222,7 @@ export default class EventForm extends React.Component {
         <div style={divCenterStyle}>
           <form>
             <TextField
+              autoFocus
               hintText="Title"
               floatingLabelText="Title"
               type="text"

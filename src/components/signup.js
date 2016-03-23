@@ -123,6 +123,7 @@ export default class Signup extends React.Component {
         <div style={divCenterStyle}>
           <form>
             <TextField
+              autoFocus
               hintText="Name"
               floatingLabelText="Name"
               type="text"
