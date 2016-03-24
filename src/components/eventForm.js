@@ -3,7 +3,6 @@ import TextField from 'material-ui/lib/text-field';
 import AutoComplete from 'material-ui/lib/auto-complete';
 import DatePicker from 'material-ui/lib/date-picker/date-picker';
 import TimePicker from 'material-ui/lib/time-picker';
-const Datetime = require('react-datetime');
 import AppBar from 'material-ui/lib/app-bar';
 import Toggle from 'material-ui/lib/toggle';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -40,6 +39,7 @@ const locationErrorText = 'Please input a location';
 export default class EventForm extends React.Component {
   constructor(props) {
     super(props);
+    let defaultDate = new Date();
     this.state = {
       title: '',
       titleError: true,
@@ -53,6 +53,10 @@ export default class EventForm extends React.Component {
       location: '',
       locationError: true,
       showLocationError: false,
+      startedAtDate: defaultDate.toDateString(),
+      startedAtTime: defaultDate.toTimeString(),
+      endedAtDate: defaultDate.toDateString(),
+      endedAtTime: defaultDate.toTimeString(),
       timeError: true,
       showTimeError: false,
       guests: '',
@@ -65,8 +69,11 @@ export default class EventForm extends React.Component {
     this.handleGuestChange = this.handleGuestChange.bind(this);
     this.handleLocationChange = this.handleLocationChange.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
+    this.handleStartedAtDateChange = this.handleStartedAtDateChange.bind(this);
+    this.handleStartedAtTimeChange = this.handleStartedAtTimeChange.bind(this);
+    this.handleEndedAtDateChange = this.handleEndedAtDateChange.bind(this);
+    this.handleEndedAtTimeChange = this.handleEndedAtTimeChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.validateTime = this.validateTime.bind(this);
     this.toggleMessage = this.toggleMessage.bind(this);
   }
 
@@ -124,23 +131,60 @@ export default class EventForm extends React.Component {
     });
   }
 
-  validateTime() {
-    let startedAt = new Date(this.refs.startAtDate.getDate().toDateString() + ' ' +
-      this.refs.startAtTime.getTime().toTimeString()).getTime()
-    let endedAt = new Date(this.refs.endAtDate.getDate().toDateString() + ' ' +
-      this.refs.endAtTime.getTime().toTimeString()).getTime()
+  startedAt(date = this.state.startedAtDate, time = this.state.startedAtTime) {
+    console.log(date);
+    console.log(time);
+    return new Date(date + ' ' + time).getTime();
+  }
 
-    if (startedAt >= endedAt) {
-      this.setState({
-        error: true,
-        timeError: true
-      });
-    } else {
-      this.setState({
-        error: false,
-        timeError: false
-      });
-    }
+  endedAt(date = this.state.endedAtDate, time = this.state.endedAtTime) {
+    return new Date(date + ' ' + time).getTime();
+  }
+
+  handleStartedAtDateChange(event, date) {
+    let startedAtDate = date.toDateString();
+    let startedAt = this.startedAt(startedAtDate);
+    let timeError = startedAt >= this.endedAt();
+    console.log(startedAt);
+    console.log(timeError);
+    this.setState({
+      startedAtDate,
+      timeError,
+      showTimeError: true,
+    })
+  }
+
+  handleStartedAtTimeChange(event, time) {
+    let startedAtTime = time.toTimeString();
+    let startedAt = this.startedAt(undefined, startedAtTime);
+    let timeError = startedAt >= this.endedAt();
+    this.setState({
+      startedAtTime,
+      timeError,
+      showTimeError: true,
+    })
+  }
+
+  handleEndedAtDateChange(event, date) {
+    let endedAtDate = date.toDateString();
+    let endedAt = this.endedAt(endedAtDate);
+    let timeError = this.startedAt() >= endedAt;
+    this.setState({
+      endedAtDate,
+      timeError,
+      showTimeError: true,
+    })
+  }
+
+  handleEndedAtTimeChange(event, time) {
+    let endedAtTime = time.toTimeString();
+    let endedAt = this.endedAt(undefined, endedAtTime);
+    let timeError = this.startedAt() >= endedAt;
+    this.setState({
+      endedAtTime,
+      timeError,
+      showHostError: true,
+    })
   }
 
   handleMessageChange(event) {
@@ -228,7 +272,7 @@ export default class EventForm extends React.Component {
             /><br />
             <TextField
               hintText="Person or organization"
-              floatingLabelText="host"
+              floatingLabelText="Host"
               type="text"
               value={this.state.host}
               errorText={this.state.hostError && this.state.showHostError ? hostErrorText : ''}
@@ -240,13 +284,14 @@ export default class EventForm extends React.Component {
               <DatePicker
                 style={pickerStyle}
                 textFieldStyle={{width: 90}}
-                ref="startAtDate"
+                onChange={this.handleStartedAtDateChange}
                 defaultDate={new Date()}
               />
               <TimePicker
                 style={pickerStyle}
                 textFieldStyle={{maxWidth: 90}}
-                ref="startAtTime"
+                ref="startedAtTime"
+                onChange={this.handleStartedAtTimeChange}
                 defaultTime={new Date()}
               />
             </div>
@@ -255,13 +300,14 @@ export default class EventForm extends React.Component {
               <DatePicker
                 style={pickerStyle}
                 textFieldStyle={{maxWidth: 90}}
-                ref="endAtDate"
+                onChange={this.handleEndedAtDateChange}
                 defaultDate={new Date()}
               />
               <TimePicker
                 style={pickerStyle}
                 textFieldStyle={{maxWidth: 90}}
-                ref="endAtTime"
+                ref="endedAtTime"
+                onChange={this.handleEndedAtTimeChange}
                 defaultTime={new Date()}
               />
             </div>
