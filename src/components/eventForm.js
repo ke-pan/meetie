@@ -3,6 +3,7 @@ import TextField from 'material-ui/lib/text-field';
 import AutoComplete from 'material-ui/lib/auto-complete';
 import DatePicker from 'material-ui/lib/date-picker/date-picker';
 import TimePicker from 'material-ui/lib/time-picker';
+const Datetime = require('react-datetime');
 import AppBar from 'material-ui/lib/app-bar';
 import Toggle from 'material-ui/lib/toggle';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -23,91 +24,86 @@ const errorMessageStyle = {
   color: 'red',
 };
 
+const pickerStyle = {
+  display: "inline-block",
+  marginLeft: 10,
+  maxWidth: 125,
+}
+
 const dataSource = ['Birthday Party', 'Wedding', 'Conference'];
+const titleErrorText = "Please input a title";
+const typeErrorText = "Please input a type";
+const hostErrorText = 'Who host the event?';
+const locationErrorText = 'Please input a location';
+
 
 export default class EventForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       title: '',
-      titleError: '',
+      titleError: true,
+      showTitleError: false,
       type: '',
-      typeError: '',
+      typeError: true,
+      showTypeError: false,
       host: '',
-      hostError: '',
+      hostError: true,
+      showHostError: false,
       location: '',
-      locationError: '',
-      timeError: false,
+      locationError: true,
+      showLocationError: false,
+      timeError: true,
+      showTimeError: false,
       guests: '',
       showMessage: false,
-      message: '',
-      error: true,
+      message: ''
     };
     this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.validateTitle = this.validateTitle.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
+    this.handleHostChange = this.handleHostChange.bind(this);
+    this.handleGuestChange = this.handleGuestChange.bind(this);
+    this.handleLocationChange = this.handleLocationChange.bind(this);
+    this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateTime = this.validateTime.bind(this);
+    this.toggleMessage = this.toggleMessage.bind(this);
   }
 
   handleTitleChange(event) {
+    let title = event.target.value;
+    let titleError = false;
+    if (title.trim() === '') {
+      titleError = true;
+    }
     this.setState({
-      title: event.target.value,
+      title,
+      titleError,
     });
   }
 
-  validateTitle() {
-    if (this.state.title.trim() === '') {
-      this.setState({
-        error: true,
-        titleError: 'Please input a title',
-      });
-    } else {
-      this.setState({
-        error: false,
-        titleError: '',
-      });
+  handleTypeChange(type) {
+    let typeError = false;
+    if (type.trim() === '') {
+      typeError = true;
     }
-  }
-
-  handleTypeChange(event) {
     this.setState({
-      type: event.target.value,
+      type,
+      typeError,
+      showTypeError: true,
     });
-  }
-
-  validateType() {
-    if (this.state.type.trim() === '') {
-      this.setState({
-        error: true,
-        typeError: 'Please input an event type',
-      });
-    } else {
-      this.setState({
-        error: false,
-        typeError: '',
-      });
-    }
   }
 
   handleHostChange(event) {
-    this.setState({
-      host: event.target.value,
-    });
-  }
-
-  validateHost() {
-    if (this.state.host.trim() === '') {
-      this.setState({
-        error: true,
-        hostError: 'Who host the event?'
-      });
-    } else {
-      this.setState({
-        error: false,
-        hostError: '',
-      });
+    let host = event.target.value;
+    let hostError = false;
+    if (host.trim() === '') {
+      hostError = true;
     }
+    this.setState({
+      host,
+      hostError,
+    });
   }
 
   handleGuestChange(event) {
@@ -117,23 +113,15 @@ export default class EventForm extends React.Component {
   }
 
   handleLocationChange(event) {
-    this.setState({
-      location: event.target.value,
-    });
-  }
-
-  validateLocation() {
-    if (this.state.location.trim() === '') {
-      this.setState({
-        error: true,
-        locationError: 'Please input a location',
-      });
-    } else {
-      this.setState({
-        error: false,
-        locationError: '',
-      });
+    let location = event.target.value;
+    let locationError = false;
+    if (location.trim() === '') {
+      locationError = true;
     }
+    this.setState({
+      location,
+      locationError,
+    });
   }
 
   validateTime() {
@@ -161,9 +149,9 @@ export default class EventForm extends React.Component {
     });
   }
 
-  toggleMessage(event) {
+  toggleMessage(event, checked) {
     this.setState({
-      showMessage: event.target.value,
+      showMessage: checked
     });
   }
 
@@ -171,6 +159,7 @@ export default class EventForm extends React.Component {
     if (this.state.showMessage) {
       return (
         <TextField
+          hintText="What else do you want to say?"
           type="text"
           multiLine={true}
           rows={6}
@@ -184,12 +173,8 @@ export default class EventForm extends React.Component {
   }
 
   handleSubmit() {
-    this.validateTitle();
-    this.validateType();
-    this.validateHost();
-    this.validateLocation();
-    this.validateTime();
-    if (!this.state.error) {
+    if (!(this.state.titleError || this.state.hostError ||
+      this.state.typeError || this.state.locationError || this.state.timeError)) {
       this.props.onSubmit({
           title: this.state.title,
           location: this.state.location,
@@ -227,54 +212,60 @@ export default class EventForm extends React.Component {
               floatingLabelText="Title"
               type="text"
               value={this.state.title}
-              errorText={this.state.titleError}
-              onBlur={this.validateTitle}
+              errorText={this.state.titleError && this.state.showTitleError ? titleErrorText : ''}
+              onBlur={() => {this.setState({showTitleError: true})}}
               onChange={this.handleTitleChange}
-              onFocus={ () => {this.setState({titleError: ''});} }
             /><br />
             <AutoComplete
+              ref="type"
               hintText="Type"
               floatingLabelText="Type"
               type="text"
-              value={this.state.type}
-              errorText={this.state.typeError}
+              errorText={this.state.typeError && this.state.showTypeError ? typeErrorText : ''}
               filter={AutoComplete.noFilter}
               dataSource={dataSource}
-              onChange={this.handleTypeChange}
+              onUpdateInput={this.handleTypeChange}
             /><br />
             <TextField
               hintText="Person or organization"
               floatingLabelText="host"
               type="text"
               value={this.state.host}
-              errorText={this.state.hostError}
-              onBlur={this.validateHost.bind(this)}
-              onChange={this.handleHostChange.bind(this)}
-              onFocus={ () => {this.setState({hostError: ''});} }
+              errorText={this.state.hostError && this.state.showHostError ? hostErrorText : ''}
+              onBlur={() => {this.setState({showHostError: true})}}
+              onChange={this.handleHostChange}
             /><br />
-            <div>
+            <div >
               <label>Start at</label>
               <DatePicker
+                style={pickerStyle}
+                textFieldStyle={{width: 90}}
                 ref="startAtDate"
                 defaultDate={new Date()}
               />
               <TimePicker
+                style={pickerStyle}
+                textFieldStyle={{maxWidth: 90}}
                 ref="startAtTime"
                 defaultTime={new Date()}
               />
             </div>
             <div>
-              <label>End at</label>
+              <label>End at </label>
               <DatePicker
+                style={pickerStyle}
+                textFieldStyle={{maxWidth: 90}}
                 ref="endAtDate"
                 defaultDate={new Date()}
               />
               <TimePicker
+                style={pickerStyle}
+                textFieldStyle={{maxWidth: 90}}
                 ref="endAtTime"
                 defaultTime={new Date()}
               />
             </div>
-            { this.state.timeError ?
+            { this.state.timeError && this.state.showTimeError ?
               <div style={errorMessageStyle}>
                 Start time should be earlier than end time
               </div> : null }
@@ -283,20 +274,19 @@ export default class EventForm extends React.Component {
               floatingLabelText="Guest list"
               type="text"
               value={this.state.guests}
-              onChange={this.handleGuestChange.bind(this)}
+              onChange={this.handleGuestChange}
             /><br />
             <TextField
               hintText="Where will this event host?"
               floatingLabelText="Location"
               type="text"
               value={this.state.location}
-              errorText={this.state.locationError}
-              onBlur={this.validateLocation.bind(this)}
-              onChange={this.handleLocationChange.bind(this)}
-              onFocus={ () => {this.setState({locationError: ''});} }
+              errorText={this.state.locationError && this.state.showLocationError ? locationErrorText : ''}
+              onBlur={() => {this.setState({showLocationError: true})}}
+              onChange={this.handleLocationChange}
             /><br />
             <Toggle
-              onToggle={this.toggleMessage.bind(this)}
+              onToggle={this.toggleMessage}
               label="Optional information"
             />
             { this.optionalMessage() }
